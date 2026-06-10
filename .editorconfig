@@ -396,13 +396,6 @@ dotnet_naming_style.underscored_camel.required_prefix = _
 # https://docs.microsoft.com/dotnet/standard/design-guidelines/index
 ##########################################
 
-# Private instance fields must be prefixed with underscore
-dotnet_naming_symbols.private_instance_fields_with_underscore.applicable_accessibilities = private
-dotnet_naming_symbols.private_instance_fields_with_underscore.applicable_kinds           = field
-dotnet_naming_rule.private_instance_fields_with_underscore.symbols                       = private_instance_fields_with_underscore
-dotnet_naming_rule.private_instance_fields_with_underscore.style = underscored_camel
-dotnet_naming_rule.private_instance_fields_with_underscore.severity = error
-
 # All public/protected/protected_internal/private constant fields must be PascalCase
 # https://docs.microsoft.com/dotnet/standard/design-guidelines/field
 dotnet_naming_symbols.constant_fields_group.applicable_accessibilities = public, protected, protected_internal, private
