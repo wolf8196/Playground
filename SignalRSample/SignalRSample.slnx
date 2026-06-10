@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="../.editorconfig" />
+  </Folder>
+  <Folder Name="/Client/">
+    <Project Path="SignalRSample.Client/SignalRSample.Client.csproj" />
+  </Folder>
+  <Folder Name="/Server/">
+    <Project Path="SignalRSample.Server/SignalRSample.Server.csproj" />
+  </Folder>
+</Solution>
