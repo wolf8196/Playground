@@ -27,9 +27,9 @@ namespace SignalRSample.Client
                     // .WithAutomaticReconnect()
                     .Build();
 
-                connection.Closed += async (error) =>
+                connection.Closed += async (ex) =>
                 {
-                    logger.Error("Connection to hub closed. Attempting to reconnect. Error: {Error}", error);
+                    logger.Error(ex, "Connection to hub closed. Attempting to reconnect...");
                     await Task.Delay(1000);
                     await connection.StartAsync();
                 };
