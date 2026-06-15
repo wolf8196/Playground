@@ -7,7 +7,7 @@ using SignalRSample.Api.Client;
 
 namespace SignalRSample.Client
 {
-    internal sealed class Startup : IGenericHostStartup
+    public sealed class Startup : IGenericHostStartup
     {
         public void ConfigureHost(IHostBuilder host)
         {
