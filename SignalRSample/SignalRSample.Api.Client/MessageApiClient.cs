@@ -2,11 +2,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
 using TypedSignalR.Client;
+using SignalRSample.HubApi;
 
 namespace SignalRSample.Api.Client
 {
     internal sealed class MessageApiClient
-        : BidirectionalApiClient<IMessageSender, IMessageReceiver>, IMessageSender
+        : HubApiClient<IMessageSender, IMessageReceiver>, IMessageSender
     {
         public MessageApiClient(
             HubConnection connection,

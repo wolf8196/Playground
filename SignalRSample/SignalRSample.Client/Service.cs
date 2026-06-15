@@ -39,7 +39,7 @@ namespace SignalRSample.Client
 
                 while (true)
                 {
-                    var message = Console.ReadLine();
+                    var message = Console.ReadLine() ?? string.Empty;
                     await messageSender.SendMessageAsync(new MessageDto { UserName = user, Text = message });
                     // await connection.InvokeAsync("SendMessage", new MessageDto { UserName = user, Text = message }, cancellationToken: stoppingToken);
                     logger.Information("Sent message: {Message}", message);

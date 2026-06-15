@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SignalRSample.Api;
 using SignalRSample.Api.Client;
+using SignalRSample.HubApi;
 
 namespace SignalRSample.Client
 {
@@ -29,7 +30,7 @@ namespace SignalRSample.Client
                 return sp.GetRequiredService<HubConnection>();
             });
 
-            services.AddHostedService<ConnectionManager>();
+            services.AddHostedService<HubConnectionManager>();
         }
     }
 }

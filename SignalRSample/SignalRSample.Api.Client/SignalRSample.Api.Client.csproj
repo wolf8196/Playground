@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SignalRSample.API\SignalRSample.Api.csproj" />
+    <ProjectReference Include="..\SignalRSample.HubApi\SignalRSample.HubApi.csproj" />
   </ItemGroup>
 
 </Project>

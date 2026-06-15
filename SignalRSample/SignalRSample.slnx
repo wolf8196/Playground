@@ -2,13 +2,14 @@
   <Folder Name="/Shared/">
     <Project Path="SignalRSample.Api.Client/SignalRSample.Api.Client.csproj" />
     <Project Path="SignalRSample.Api/SignalRSample.Api.csproj" />
+    <Project Path="SignalRSample.HubApi/SignalRSample.HubApi.csproj"  />
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path="../.editorconfig" />
   </Folder>
   <Folder Name="/Client/">
     <Project Path="SignalRSample.Client/SignalRSample.Client.csproj" />
-    <Project Path="SignalRSample.Client2/SignalRSample.Client2.csproj" Id="ddcefc4a-1189-4962-9fa8-3a27e6b7c8e5" />
+    <Project Path="SignalRSample.Client2/SignalRSample.Client2.csproj" />
   </Folder>
   <Folder Name="/Server/">
     <Project Path="SignalRSample.Server/SignalRSample.Server.csproj" />

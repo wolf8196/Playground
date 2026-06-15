@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.SignalR.Client;
 
-namespace SignalRSample.Api.Client
+namespace SignalRSample.HubApi
 {
-    internal abstract class BidirectionalApiClient<TSender, TReceiver>
+    public abstract class HubApiClient<TSender, TReceiver>
         where TSender : class
         where TReceiver : class
     {
-        public BidirectionalApiClient(
+        public HubApiClient(
             HubConnection connection,
             IEnumerable<TReceiver>? receivers = null)
         {
