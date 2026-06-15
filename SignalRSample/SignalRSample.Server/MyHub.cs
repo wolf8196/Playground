@@ -1,13 +1,14 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
+using SignalRSample.Api;
 
 namespace SignalRSample.Server
 {
-    public class MyHub : Hub<IMyMessageHub>
+    public class MyHub : Hub<IMessageReceiver>, IMessageSender
     {
-        public async Task SendMessage(string user, string message)
+        public async Task SendMessageAsync(MessageDto message)
         {
-            await Clients.Others.ReceiveMessage(user, message);
+            await Clients.Others.ReceiveMessageAsync(message);
         }
     }
 }

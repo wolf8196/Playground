@@ -1,4 +1,8 @@
 <Solution>
+  <Folder Name="/Shared/">
+    <Project Path="SignalRSample.Api.Client/SignalRSample.Api.Client.csproj"/>
+    <Project Path="SignalRSample.Api/SignalRSample.Api.csproj"/>
+  </Folder>
   <Folder Name="/Solution Items/">
     <File Path="../.editorconfig" />
   </Folder>

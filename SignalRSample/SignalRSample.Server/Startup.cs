@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SignalRSample.Api;
 
 namespace SignalRSample.Server
 {
@@ -15,13 +16,14 @@ namespace SignalRSample.Server
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHostedService<Worker>();
             services.AddSignalR();
         }
 
         public void ConfigureApplication(IApplicationBuilder app)
         {
             app.UseRouting();
-            app.UseEndpoints(x => x.MapHub<MyHub>("/my-hub"));
+            app.UseEndpoints(x => x.MapHub<MyHub>($"/{Routes.MyHubRoute}"));
         }
     }
 }
