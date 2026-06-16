@@ -1,19 +1,18 @@
-using System.Collections.Generic;
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
-using TypedSignalR.Client;
 using SignalRSample.HubApi;
+using TypedSignalR.Client;
 
 namespace SignalRSample.Api.Client
 {
-    internal sealed class MessageApiClient
-        : HubApiClient<IMessageSender, IMessageReceiver>, IMessageSender
+    public class MessageApiClient
+        : HubApiClient<IMessageSender, IMessageReceiver>, IMessageSender, IMessageReceiver
     {
-        public MessageApiClient(
-            HubConnection connection,
-            IEnumerable<IMessageReceiver> receivers)
-            : base(connection, receivers)
+        public MessageApiClient(HubConnection connection)
+            : base(connection)
         {
+            Subscription = AddReceiver(connection, this);
         }
 
         public Task SendMessageAsync(MessageDto message)
@@ -21,14 +20,18 @@ namespace SignalRSample.Api.Client
             return Proxy.SendMessageAsync(message);
         }
 
+        public virtual Task ReceiveMessageAsync(MessageDto message) => Task.CompletedTask;
+
+        // required to specify real interfaces
+        // otherwise proxy won't generate
         public override IMessageSender CreateProxy(HubConnection connection)
         {
             return connection.CreateHubProxy<IMessageSender>();
         }
 
-        public override void AddReceiver(HubConnection connection, IMessageReceiver receiver)
+        public override IDisposable AddReceiver(HubConnection connection, IMessageReceiver receiver)
         {
-            connection.Register(receiver);
+            return connection.Register<IMessageReceiver>(this);
         }
     }
 }

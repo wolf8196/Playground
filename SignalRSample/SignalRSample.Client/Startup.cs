@@ -1,10 +1,10 @@
+using System;
 using JustMyPackages.Hosting;
-using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SignalRSample.Api;
 using SignalRSample.Api.Client;
-using SignalRSample.HubApi;
 
 namespace SignalRSample.Client
 {
@@ -17,20 +17,11 @@ namespace SignalRSample.Client
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton(
+                sp => sp.GetRequiredService<IConfiguration>().Get<ClientOptions>()
+                    ?? throw new ArgumentNullException(nameof(ClientOptions)));
             services.AddHostedService<Service>();
-            services.AddSingleton(sp =>
-            {
-                return new HubConnectionBuilder()
-                    .WithUrl($"http://localhost:4321/{Routes.MyHubRoute}")
-                    // .WithAutomaticReconnect()
-                    .Build();
-            });
-            services.AddApiClient<MessageReceiver>(sp =>
-            {
-                return sp.GetRequiredService<HubConnection>();
-            });
-
-            services.AddHostedService<HubConnectionManager>();
+            services.AddMessageApiClient<MessageApiReceiver>(Routes.MyHubRoute, sp => sp.GetRequiredService<ClientOptions>().ServiceUrl);
         }
     }
 }

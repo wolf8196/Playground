@@ -2,7 +2,7 @@
   <Folder Name="/Shared/">
     <Project Path="SignalRSample.Api.Client/SignalRSample.Api.Client.csproj" />
     <Project Path="SignalRSample.Api/SignalRSample.Api.csproj" />
-    <Project Path="SignalRSample.HubApi/SignalRSample.HubApi.csproj"  />
+    <Project Path="SignalRSample.HubApi/SignalRSample.HubApi.csproj" />
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path="../.editorconfig" />
