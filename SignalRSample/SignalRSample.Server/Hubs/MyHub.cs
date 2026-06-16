@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using SignalRSample.Api;
 
-namespace SignalRSample.Server
+namespace SignalRSample.Server.Hubs
 {
     public class MyHub : Hub<IMessageReceiver>, IMessageSender
     {

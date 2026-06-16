@@ -5,7 +5,7 @@ using Serilog;
 using SignalRSample.Api;
 using SignalRSample.Api.Client;
 
-namespace SignalRSample.Client
+namespace SignalRSample.Client.HubClients
 {
     internal sealed class MessageApiReceiver : MessageApiClient
     {

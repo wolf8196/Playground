@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SignalRSample.Api;
 using SignalRSample.Api.Client;
+using SignalRSample.Client.HubClients;
 
 namespace SignalRSample.Client
 {
