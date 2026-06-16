@@ -7,9 +7,9 @@ namespace SignalRSample.HubApi
     {
         private readonly TimeSpan initialDelay;
         private readonly TimeSpan? maxDelay;
-        private readonly int maxRetries;
+        private readonly int? maxRetries;
 
-        public ExponentialBackoffWithJitter(TimeSpan initialDelay, TimeSpan? maxDelay = null, int maxRetries = 5)
+        public ExponentialBackoffWithJitter(TimeSpan initialDelay, TimeSpan? maxDelay = null, int? maxRetries = null)
         {
             this.initialDelay = initialDelay;
             this.maxDelay = maxDelay;
@@ -20,7 +20,7 @@ namespace SignalRSample.HubApi
         {
             ArgumentNullException.ThrowIfNull(retryContext);
 
-            if (maxRetries >= 0 && retryContext.PreviousRetryCount >= maxRetries)
+            if (maxRetries.HasValue && retryContext.PreviousRetryCount >= maxRetries.Value)
             {
                 return null;
             }

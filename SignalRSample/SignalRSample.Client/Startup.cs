@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using SignalRSample.Api;
 using SignalRSample.Api.Client;
 using SignalRSample.Client.HubClients;
+using SignalRSample.Client.Workers;
 
 namespace SignalRSample.Client
 {
