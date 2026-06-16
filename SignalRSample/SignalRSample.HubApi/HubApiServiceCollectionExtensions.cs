@@ -2,7 +2,7 @@ using System;
 using Flurl;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+using Serilog;
 
 namespace SignalRSample.HubApi
 {
@@ -13,13 +13,17 @@ namespace SignalRSample.HubApi
             string route,
             Func<IServiceProvider, string> serviceUrl)
         {
-            services.TryAddSingleton<IRetryPolicy>(
-                sp => new ExponentialBackoffWithJitter(TimeSpan.FromSeconds(2), TimeSpan.FromMinutes(1)));
             services.AddKeyedSingleton(route, (sp, key) =>
             {
+                var url = Url.Combine(serviceUrl(sp), key!.ToString());
                 return new HubConnectionBuilder()
-                    .WithUrl(Url.Combine(serviceUrl(sp), key!.ToString()))
-                    .WithAutomaticReconnect(sp.GetRequiredService<IRetryPolicy>())
+                    .WithUrl(url)
+                    .WithAutomaticReconnect(
+                        new ExponentialBackoffWithJitter(
+                            url,
+                            TimeSpan.FromSeconds(2),
+                            TimeSpan.FromMinutes(1),
+                            logger: sp.GetRequiredService<ILogger<ExponentialBackoffWithJitter>>()))
                     .Build();
             });
             services.AddSingleton(sp => sp.GetRequiredKeyedService<HubConnection>(route));

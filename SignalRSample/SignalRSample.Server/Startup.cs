@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SignalRSample.Api;
 using SignalRSample.Server.Hubs;
+using SignalRSample.Server.Services;
 
 namespace SignalRSample.Server
 {
@@ -17,7 +18,8 @@ namespace SignalRSample.Server
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddHostedService<Worker>();
+            services.AddHostedService<MessageService>();
+            services.AddHostedService<ControlService>();
             services.AddSignalR();
         }
 

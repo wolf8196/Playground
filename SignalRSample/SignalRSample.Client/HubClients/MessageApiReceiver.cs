@@ -25,19 +25,19 @@ namespace SignalRSample.Client.HubClients
 
         public override Task OnClosed(Exception? exception)
         {
-            logger.Information(exception, "Connection closed.");
+            logger.Information("Connection closed. Error: {Error}", exception?.Message);
             return base.OnClosed(exception);
         }
 
         public override Task OnReconnecting(Exception? exception)
         {
-            logger.Information(exception, "Reconnecting...");
+            logger.Information("Reconnecting... Error: {Error}", exception?.Message);
             return base.OnReconnecting(exception);
         }
 
         public override Task OnReconnected(string? connectionId)
         {
-            logger.Information("Reconnected...");
+            logger.Information("Reconnected. ConnectionId: {ConnectionId}", connectionId);
             return base.OnReconnected(connectionId);
         }
     }

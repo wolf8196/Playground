@@ -5,14 +5,14 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using SignalRSample.Api;
 
-namespace SignalRSample.Client.Workers
+namespace SignalRSample.Client.Services
 {
-    internal sealed class Service : BackgroundService
+    internal sealed class MessageService : BackgroundService
     {
         private readonly IMessageSender messageSender;
-        private readonly ILogger<Service> logger;
+        private readonly ILogger<MessageService> logger;
 
-        public Service(IMessageSender messageSender, ILogger<Service> logger)
+        public MessageService(IMessageSender messageSender, ILogger<MessageService> logger)
         {
             this.logger = logger;
             this.messageSender = messageSender;

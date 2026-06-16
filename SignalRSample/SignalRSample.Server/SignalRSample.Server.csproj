@@ -6,6 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="JustMyPackages.Hosting" Version="1.0.0-preview1" />
   </ItemGroup>
 

@@ -14,9 +14,7 @@ namespace SignalRSample.HubApi
         private readonly IReadOnlyCollection<HubConnection> connections;
         private readonly IAsyncPolicy policy;
 
-        public HubConnectionService(
-            IRetryPolicy hubRetryPolicy,
-            IEnumerable<HubConnection>? connections = null)
+        public HubConnectionService(IEnumerable<HubConnection>? connections = null)
         {
             policy = new ResiliencePipelineBuilder()
                 .AddRetry(new Polly.Retry.RetryStrategyOptions

@@ -1,19 +1,29 @@
 using System;
 using Microsoft.AspNetCore.SignalR.Client;
+using Serilog;
 
 namespace SignalRSample.HubApi
 {
     internal class ExponentialBackoffWithJitter : IRetryPolicy
     {
+        private readonly string url;
         private readonly TimeSpan initialDelay;
         private readonly TimeSpan? maxDelay;
         private readonly int? maxRetries;
+        private readonly ILogger<ExponentialBackoffWithJitter>? logger;
 
-        public ExponentialBackoffWithJitter(TimeSpan initialDelay, TimeSpan? maxDelay = null, int? maxRetries = null)
+        public ExponentialBackoffWithJitter(
+            string url,
+            TimeSpan initialDelay,
+            TimeSpan? maxDelay = null,
+            int? maxRetries = null,
+            ILogger<ExponentialBackoffWithJitter>? logger = null)
         {
+            this.url = url;
             this.initialDelay = initialDelay;
             this.maxDelay = maxDelay;
             this.maxRetries = maxRetries;
+            this.logger = logger;
         }
 
         public TimeSpan? NextRetryDelay(RetryContext retryContext)
@@ -33,9 +43,9 @@ namespace SignalRSample.HubApi
             }
 
             var jitteredMs = Random.Shared.NextDouble() * Math.Max(0, exponentialDelayMs);
+            var delay = TimeSpan.FromMilliseconds(exponentialDelayMs + jitteredMs);
 
-            var delay = TimeSpan.FromMilliseconds(Math.Max(0, Math.Floor(jitteredMs)));
-
+            logger?.Information("Reconnecting to {Url}... Next try in {Delay}", url, delay);
             return delay;
         }
     }

@@ -6,7 +6,7 @@ using Microsoft.Extensions.Hosting;
 using SignalRSample.Api;
 using SignalRSample.Api.Client;
 using SignalRSample.Client.HubClients;
-using SignalRSample.Client.Workers;
+using SignalRSample.Client.Services;
 
 namespace SignalRSample.Client
 {
@@ -22,7 +22,7 @@ namespace SignalRSample.Client
             services.AddSingleton(
                 sp => sp.GetRequiredService<IConfiguration>().Get<ClientOptions>()
                     ?? throw new ArgumentNullException(nameof(ClientOptions)));
-            services.AddHostedService<Service>();
+            services.AddHostedService<MessageService>();
             services.AddMessageApiClient<MessageApiReceiver>(Routes.MyHubRoute, sp => sp.GetRequiredService<ClientOptions>().ServiceUrl);
         }
     }
