@@ -26,7 +26,7 @@ namespace SignalRSample.Server
         public void ConfigureApplication(IApplicationBuilder app)
         {
             app.UseRouting();
-            app.UseEndpoints(x => x.MapHub<MyHub>($"/{Routes.MyHubRoute}"));
+            app.UseEndpoints(x => x.MapHub<MessageHub>($"/{Routes.MessageHubRoute}"));
         }
     }
 }

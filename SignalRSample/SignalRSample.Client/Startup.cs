@@ -23,7 +23,7 @@ namespace SignalRSample.Client
                 sp => sp.GetRequiredService<IConfiguration>().Get<ClientOptions>()
                     ?? throw new ArgumentNullException(nameof(ClientOptions)));
             services.AddHostedService<MessageService>();
-            services.AddMessageApiClient<MessageApiReceiver>(Routes.MyHubRoute, sp => sp.GetRequiredService<ClientOptions>().ServiceUrl);
+            services.AddMessageApiClient<MessageApiReceiver>(Routes.MessageHubRoute, sp => sp.GetRequiredService<ClientOptions>().ServiceUrl);
         }
     }
 }

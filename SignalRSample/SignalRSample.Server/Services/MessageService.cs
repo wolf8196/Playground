@@ -10,9 +10,9 @@ namespace SignalRSample.Server.Services
 {
     public class MessageService : BackgroundService
     {
-        private readonly IHubContext<MyHub, IMessageReceiver> hubContext;
+        private readonly IHubContext<MessageHub, IMessageReceiver> hubContext;
 
-        public MessageService(IHubContext<MyHub, IMessageReceiver> hubContext)
+        public MessageService(IHubContext<MessageHub, IMessageReceiver> hubContext)
         {
             this.hubContext = hubContext;
         }

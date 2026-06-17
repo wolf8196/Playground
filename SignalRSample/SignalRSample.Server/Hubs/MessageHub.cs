@@ -4,7 +4,7 @@ using SignalRSample.Api;
 
 namespace SignalRSample.Server.Hubs
 {
-    public class MyHub : Hub<IMessageReceiver>, IMessageSender
+    public class MessageHub : Hub<IMessageReceiver>, IMessageSender
     {
         public async Task SendMessageAsync(MessageDto message)
         {

@@ -1,5 +1,6 @@
 using System;
 using Flurl;
+using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -16,8 +17,8 @@ namespace SignalRSample.HubApi
             services.AddKeyedSingleton(route, (sp, key) =>
             {
                 var url = Url.Combine(serviceUrl(sp), key!.ToString());
-                return new HubConnectionBuilder()
-                    .WithUrl(url)
+                var connection = new HubConnectionBuilder()
+                    .WithUrl(url, HttpTransportType.WebSockets)
                     .WithAutomaticReconnect(
                         new ExponentialBackoffWithJitter(
                             url,
@@ -25,8 +26,15 @@ namespace SignalRSample.HubApi
                             TimeSpan.FromMinutes(1),
                             logger: sp.GetRequiredService<ILogger<ExponentialBackoffWithJitter>>()))
                     .Build();
+                return new NamedHubConnection
+                {
+                    Route = route,
+                    Url = url,
+                    Connection = connection
+                };
             });
-            services.AddSingleton(sp => sp.GetRequiredKeyedService<HubConnection>(route));
+            services.AddKeyedSingleton(route, (sp, key) => sp.GetRequiredKeyedService<NamedHubConnection>(route).Connection);
+            services.AddSingleton(sp => sp.GetRequiredKeyedService<NamedHubConnection>(route));
             return services;
         }
 

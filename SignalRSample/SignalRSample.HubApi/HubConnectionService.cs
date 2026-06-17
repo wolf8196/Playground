@@ -6,15 +6,17 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Hosting;
 using Polly;
+using Serilog;
 
 namespace SignalRSample.HubApi
 {
-    public class HubConnectionService : BackgroundService
+    internal class HubConnectionService : BackgroundService
     {
-        private readonly IReadOnlyCollection<HubConnection> connections;
+        private const string CtxKey = "Connection";
+        private readonly IReadOnlyCollection<NamedHubConnection> connections;
         private readonly IAsyncPolicy policy;
 
-        public HubConnectionService(IEnumerable<HubConnection>? connections = null)
+        public HubConnectionService(ILogger<HubConnectionService> logger, IEnumerable<NamedHubConnection>? connections = null)
         {
             policy = new ResiliencePipelineBuilder()
                 .AddRetry(new Polly.Retry.RetryStrategyOptions
@@ -24,6 +26,12 @@ namespace SignalRSample.HubApi
                     BackoffType = DelayBackoffType.Exponential,
                     MaxDelay = TimeSpan.FromMinutes(1),
                     Delay = TimeSpan.FromSeconds(2),
+                    OnRetry = (args) =>
+                    {
+                        args.Context.Properties.TryGetValue<NamedHubConnection>(new(CtxKey), out var value);
+                        logger.Error("Failed to establish initial connection to {Url}", value?.Url);
+                        return ValueTask.CompletedTask;
+                    }
                 })
                 .Build()
                 .AsAsyncPolicy();
@@ -36,9 +44,12 @@ namespace SignalRSample.HubApi
             await Task.WhenAll(connections.Select(c => StartConnection(c, stoppingToken)).ToArray());
         }
 
-        private Task StartConnection(HubConnection connection, CancellationToken token)
+        private Task StartConnection(NamedHubConnection namedConnection, CancellationToken token)
         {
-            return policy.ExecuteAsync(t => connection.StartAsync(t), token);
+            return policy.ExecuteAsync(
+                (ctx, t) => namedConnection.Connection.StartAsync(t),
+                new Dictionary<string, object> { { CtxKey, namedConnection } },
+                token);
         }
     }
 }

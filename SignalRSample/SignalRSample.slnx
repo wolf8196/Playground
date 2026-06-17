@@ -6,6 +6,7 @@
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path="../.editorconfig" />
+    <File Path="run-multiple.bat" />
   </Folder>
   <Folder Name="/Client/">
     <Project Path="SignalRSample.Client/SignalRSample.Client.csproj" />
