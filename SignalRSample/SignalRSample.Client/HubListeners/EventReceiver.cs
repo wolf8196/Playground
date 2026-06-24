@@ -3,23 +3,41 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
 using Serilog;
 using SignalRSample.Api;
-using SignalRSample.Api.Client;
+using SignalRSample.Api.Client.Events;
+using SignalRSample.Client.Services;
 
-namespace SignalRSample.Client.HubClients
+namespace SignalRSample.Client.HubListeners
 {
-    internal sealed class MessageApiReceiver : MessageApiClient
+    internal sealed class EventReceiver : EventListener
     {
-        private readonly ILogger<MessageApiReceiver> logger;
+        private readonly IEventService eventService;
+        private readonly ILogger<EventReceiver> logger;
 
-        public MessageApiReceiver(HubConnection connection, ILogger<MessageApiReceiver> logger)
+        public EventReceiver(
+            HubConnection connection,
+            IEventService eventService,
+            ILogger<EventReceiver> logger)
             : base(connection)
         {
+            this.eventService = eventService;
             this.logger = logger;
         }
 
-        public override Task ReceiveMessageAsync(MessageDto message)
+        public override Task EventAdded(EventDto evt)
         {
-            logger.Information("Received message from {User}: {Message}", message.UserName, message.Text);
+            eventService.AddEvent(evt);
+            return Task.CompletedTask;
+        }
+
+        public override Task EventRemoved(EventDto evt)
+        {
+            eventService.RemoveEvent(evt);
+            return Task.CompletedTask;
+        }
+
+        public override Task EventUpdated(EventDto evt)
+        {
+            eventService.UpdateEvent(evt);
             return Task.CompletedTask;
         }
 

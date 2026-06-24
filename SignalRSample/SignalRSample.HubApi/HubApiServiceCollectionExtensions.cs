@@ -44,17 +44,29 @@ namespace SignalRSample.HubApi
             return services;
         }
 
-        public static IServiceCollection AddHubApiClient<TClient, TSender, TReceiver>(
+        public static IServiceCollection AddHubApiClient<TClient, TSender>(
             this IServiceCollection services,
             string route)
-            where TClient : HubApiClient<TSender, TReceiver>, TSender, TReceiver
+            where TClient : HubApiClient<TSender>, TSender
             where TSender : class
-            where TReceiver : class
         {
             services.AddSingleton(
                 sp => ActivatorUtilities.CreateInstance<TClient>(sp, sp.GetRequiredKeyedService<HubConnection>(route)));
-            services.AddSingleton<TReceiver>(sp => sp.GetRequiredService<TClient>());
             services.AddSingleton<TSender>(sp => sp.GetRequiredService<TClient>());
+
+            return services;
+        }
+
+        public static IServiceCollection AddHubListener<TListener, TReceiver>(
+            this IServiceCollection services,
+            string route)
+            where TListener : HubListener, TReceiver
+            where TReceiver : class
+        {
+            services.AddSingleton(
+                sp => ActivatorUtilities.CreateInstance<TListener>(sp, sp.GetRequiredKeyedService<HubConnection>(route)));
+            services.AddSingleton<TReceiver>(sp => sp.GetRequiredService<TListener>());
+            services.AddSingleton<HubListener>(sp => sp.GetRequiredService<TListener>());
 
             return services;
         }

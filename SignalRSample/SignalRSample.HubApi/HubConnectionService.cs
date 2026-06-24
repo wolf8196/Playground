@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Hosting;
 using Polly;
 using Serilog;
@@ -16,7 +15,10 @@ namespace SignalRSample.HubApi
         private readonly IReadOnlyCollection<NamedHubConnection> connections;
         private readonly IAsyncPolicy policy;
 
-        public HubConnectionService(ILogger<HubConnectionService> logger, IEnumerable<NamedHubConnection>? connections = null)
+        public HubConnectionService(
+            ILogger<HubConnectionService> logger,
+            IEnumerable<NamedHubConnection>? connections = null,
+            IEnumerable<HubListener>? listeners = null)
         {
             policy = new ResiliencePipelineBuilder()
                 .AddRetry(new Polly.Retry.RetryStrategyOptions
@@ -25,6 +27,7 @@ namespace SignalRSample.HubApi
                     UseJitter = true,
                     BackoffType = DelayBackoffType.Exponential,
                     MaxDelay = TimeSpan.FromMinutes(1),
+                    MaxRetryAttempts = int.MaxValue,
                     Delay = TimeSpan.FromSeconds(2),
                     OnRetry = (args) =>
                     {

@@ -10,7 +10,6 @@
   </Folder>
   <Folder Name="/Client/">
     <Project Path="SignalRSample.Client/SignalRSample.Client.csproj" />
-    <Project Path="SignalRSample.Client2/SignalRSample.Client2.csproj" />
   </Folder>
   <Folder Name="/Server/">
     <Project Path="SignalRSample.Server/SignalRSample.Server.csproj" />

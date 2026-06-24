@@ -20,11 +20,14 @@ namespace SignalRSample.Client.Services
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            await Task.Delay(3000, stoppingToken);
+
             var user = $"User{new Random().Next(10)}";
 
             try
             {
                 logger.Information("Starting client with User {User}", user);
+                logger.Information("Enter message:");
 
                 while (true)
                 {

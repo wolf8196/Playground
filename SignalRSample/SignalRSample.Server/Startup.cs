@@ -18,7 +18,8 @@ namespace SignalRSample.Server
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddHostedService<MessageService>();
+            // services.AddHostedService<MessageService>();
+            services.AddHostedService<EventService>();
             services.AddHostedService<ControlService>();
             services.AddSignalR();
         }
@@ -26,7 +27,11 @@ namespace SignalRSample.Server
         public void ConfigureApplication(IApplicationBuilder app)
         {
             app.UseRouting();
-            app.UseEndpoints(x => x.MapHub<MessageHub>($"/{Routes.MessageHubRoute}"));
+            app.UseEndpoints(x =>
+            {
+                x.MapHub<MessageHub>($"/{Routes.MessageHubRoute}");
+                x.MapHub<EventHub>($"/{Routes.EventHubRoute}");
+            });
         }
     }
 }
