@@ -19,7 +19,8 @@ namespace SignalRSample.Server
         public void ConfigureServices(IServiceCollection services)
         {
             // services.AddHostedService<MessageService>();
-            services.AddHostedService<EventService>();
+            services.AddSingleton<IEventService, EventService>();
+            services.AddHostedService(sp => (EventService)sp.GetRequiredService<IEventService>());
             services.AddHostedService<ControlService>();
             services.AddSignalR();
         }

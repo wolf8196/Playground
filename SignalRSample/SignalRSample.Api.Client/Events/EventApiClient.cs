@@ -15,8 +15,6 @@ namespace SignalRSample.Api.Client.Events
 
         public Task Subscribe(EventSubscriptionDto subscription) => Proxy.Subscribe(subscription);
 
-        public Task Unsubscribe(EventSubscriptionDto subscription) => Proxy.Unsubscribe(subscription);
-
         public override IEventSender CreateProxy(HubConnection connection)
         {
             return connection.CreateHubProxy<IEventSender>();

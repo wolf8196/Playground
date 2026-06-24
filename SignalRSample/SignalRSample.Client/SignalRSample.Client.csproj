@@ -9,11 +9,11 @@
   <ItemGroup>
     <PackageReference Include="JustMyPackages.Hosting" Version="1.0.0-preview1" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="10.0.9" />
-    <PackageReference Include="Spectre.Console" Version="0.57.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SignalRSample.Api.Client\SignalRSample.Api.Client.csproj" />
+    <ProjectReference Include="..\SignalRSample.Shared\SignalRSample.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

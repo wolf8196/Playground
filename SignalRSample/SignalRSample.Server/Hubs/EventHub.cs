@@ -3,15 +3,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using Serilog;
 using SignalRSample.Api;
+using SignalRSample.Server.Services;
 
 namespace SignalRSample.Server.Hubs
 {
     public class EventHub : Hub<IEventReceiver>, IEventSender
     {
+        private readonly IEventService eventService;
         private readonly ILogger<EventHub> logger;
 
-        public EventHub(ILogger<EventHub> logger)
+        public EventHub(IEventService eventService, ILogger<EventHub> logger)
         {
+            this.eventService = eventService;
             this.logger = logger;
         }
 
@@ -20,16 +23,12 @@ namespace SignalRSample.Server.Hubs
             foreach (var unitId in subscription.UnitIds)
             {
                 await Groups.AddToGroupAsync(Context.ConnectionId, unitId.ToString());
-                logger.Information("{ConnectionId} subscribed to group {UnitId}", Context.ConnectionId, unitId);
-            }
-        }
+                foreach (var evt in eventService.GetEvents(unitId))
+                {
+                    await Clients.Caller.EventAdded(evt);
+                }
 
-        public async Task Unsubscribe(EventSubscriptionDto subscription)
-        {
-            foreach (var unitId in subscription.UnitIds)
-            {
-                await Groups.RemoveFromGroupAsync(Context.ConnectionId, unitId.ToString());
-                logger.Information("{ConnectionId} unsubscribed from group {UnitId}", Context.ConnectionId, unitId);
+                logger.Debug("{ConnectionId} subscribed to group {UnitId}", Context.ConnectionId, unitId);
             }
         }
 

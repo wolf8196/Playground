@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -9,13 +8,14 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using SignalRSample.Api;
 using SignalRSample.Server.Hubs;
+using SignalRSample.Shared;
 using Spectre.Console;
 
 namespace SignalRSample.Server.Services
 {
-    public class EventService : BackgroundService
+    public class EventService : BackgroundService, IEventService
     {
-        private readonly ConcurrentDictionary<int, List<EventDto>> units;
+        private readonly EventCollection events;
         private readonly IHubContext<EventHub, IEventReceiver> hubContext;
         private readonly ILogger<EventService> logger;
 
@@ -25,15 +25,19 @@ namespace SignalRSample.Server.Services
         {
             this.hubContext = hubContext;
             this.logger = logger;
-            units = new ConcurrentDictionary<int, List<EventDto>>(
-                Enumerable.Range(1, 5)
-                .ToDictionary(x => x, x => new List<EventDto>()));
+            events = new EventCollection();
+        }
+
+        public IReadOnlyCollection<EventDto> GetEvents(int unitId)
+        {
+            return events.GetEvents(unitId);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            var simuTasks = units.Keys.Select(i => SimulateUnitEvents(i, stoppingToken))
-                .Append(Monitor(stoppingToken))
+            await Task.Delay(1000, stoppingToken);
+            var simuTasks = Enumerable.Range(1, 5).Select(i => SimulateUnitEvents(i, stoppingToken))
+                .Append(EventMonitor.SpectreConsole(events, stoppingToken))
                 .ToArray();
 
             await Task.WhenAll(simuTasks);
@@ -56,36 +60,35 @@ namespace SignalRSample.Server.Services
                     .ToList();
 
                     var operation = ops[(int)Random.Shared.NextInt64(0, ops.Count - 1)];
-                    var evts = units[unitId];
+                    var evts = events.GetEvents(unitId);
                     var evtId = $"Event-{Random.Shared.NextInt64(1, 4)}";
+                    var evt = evts.FirstOrDefault(x => x.Identifier == evtId);
 
                     switch (operation)
                     {
                         case Operation.Add:
                             {
-                                if (evts.Exists(x => x.Identifier == evtId))
+                                if (evt != null)
                                 {
                                     continue;
                                 }
 
-                                var evt = new EventDto
+                                evt = new EventDto
                                 {
                                     UnitId = unitId,
                                     Identifier = evtId,
                                     Number = 1,
                                 };
-                                units[unitId].Add(evt);
+                                events.AddEvent(evt);
                                 await hubContext.Clients.Group(unitId.ToString()).EventAdded(evt);
                                 break;
                             }
 
                         case Operation.Remove:
                             {
-                                var idx = evts.FindIndex(x => x.Identifier == evtId);
-                                if (idx >= 0)
+                                if (evt != null)
                                 {
-                                    var evt = evts[idx];
-                                    evts.RemoveAt(idx);
+                                    events.RemoveEvent(evt);
                                     await hubContext.Clients.Group(unitId.ToString()).EventRemoved(evt);
                                 }
 
@@ -94,10 +97,10 @@ namespace SignalRSample.Server.Services
 
                         case Operation.Update:
                             {
-                                var evt = evts.FirstOrDefault(x => x.Identifier == evtId);
                                 if (evt != null)
                                 {
                                     evt.Number++;
+                                    events.UpdateEvent(evt);
                                     await hubContext.Clients.Group(unitId.ToString()).EventUpdated(evt);
                                 }
                                 break;
@@ -111,55 +114,6 @@ namespace SignalRSample.Server.Services
                 }
             },
             token);
-        }
-
-        private async Task Monitor(CancellationToken token)
-        {
-            await Task.Delay(3000, token);
-            await Task.Run(() =>
-            {
-                var table = new Table()
-                   .AddColumn("Unit")
-                   .AddColumn("EventId")
-                   .AddColumn("Number");
-
-                AnsiConsole.Live(table)
-                    .Start(ctx =>
-                    {
-                        while (!token.IsCancellationRequested)
-                        {
-                            table.Rows.Clear();
-
-                            foreach (var unit in units.ToDictionary())
-                            {
-                                foreach (var evt in unit.Value)
-                                {
-                                    table.AddRow(
-                                        evt.UnitId.ToString(),
-                                        evt.Identifier,
-                                        evt.Number.ToString());
-                                }
-                            }
-
-                            ctx.Refresh();
-                            Thread.Sleep(1000);
-                        }
-                    });
-            },
-            token);
-
-            //while (!token.IsCancellationRequested)
-            //{
-            //    logger.Information("Event status:");
-            //    logger.Information("{@Events}", units
-            //        .Select(x => new
-            //        {
-            //            UnitId = x.Key,
-            //            Events = x.Value.Select(y => $"{y.Identifier}-{y.Number}")
-            //        }));
-
-            //    await Task.Delay(2000, token);
-            //}
         }
 
         private enum Operation

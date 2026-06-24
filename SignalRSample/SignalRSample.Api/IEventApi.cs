@@ -5,8 +5,6 @@ namespace SignalRSample.Api
     public interface IEventSender
     {
         Task Subscribe(EventSubscriptionDto subscription);
-
-        Task Unsubscribe(EventSubscriptionDto subscription);
     }
 
     public interface IEventReceiver

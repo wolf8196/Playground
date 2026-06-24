@@ -3,6 +3,7 @@
     <Project Path="SignalRSample.Api.Client/SignalRSample.Api.Client.csproj" />
     <Project Path="SignalRSample.Api/SignalRSample.Api.csproj" />
     <Project Path="SignalRSample.HubApi/SignalRSample.HubApi.csproj" />
+    <Project Path="SignalRSample.Shared/SignalRSample.Shared.csproj" Id="3a445fe8-dd98-472a-9b73-85b431318963" />
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path="../.editorconfig" />
