@@ -482,3 +482,6 @@ csharp_style_prefer_primary_constructors = true:suggestion
 csharp_prefer_system_threading_lock = true:suggestion
 csharp_style_prefer_simple_property_accessors = true:suggestion
 dotnet_diagnostic.CA1305.severity = silent
+
+# xUnit1045: Avoid using TheoryData type arguments that might not be serializable
+dotnet_diagnostic.xUnit1045.severity = none
