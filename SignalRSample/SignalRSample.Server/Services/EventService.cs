@@ -110,7 +110,7 @@ namespace SignalRSample.Server.Services
                             break;
                     }
 
-                    await Task.Delay(1000 + (int)Random.Shared.NextInt64(0, 1000), token);
+                    await Task.Delay(500 + (int)Random.Shared.NextInt64(0, 1000), token);
                 }
             },
             token);

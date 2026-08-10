@@ -50,6 +50,13 @@ namespace SignalRSample.Shared
                 });
         }
 
+        public void SetEvents(int unitId, IReadOnlyCollection<EventDto> events)
+        {
+            units.AddOrUpdate(unitId,
+                key => new ConcurrentDictionary<string, EventDto>(events.ToDictionary(x => x.Identifier)),
+                (key, existing) => new ConcurrentDictionary<string, EventDto>(events.ToDictionary(x => x.Identifier)));
+        }
+
         public IReadOnlyCollection<EventDto> GetEvents()
         {
             return units.SelectMany(x => x.Value.Values).ToList();

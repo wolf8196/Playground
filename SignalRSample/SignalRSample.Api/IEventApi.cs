@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SignalRSample.Api
@@ -14,5 +15,7 @@ namespace SignalRSample.Api
         Task EventRemoved(EventDto evt);
 
         Task EventUpdated(EventDto evt);
+
+        Task SnapshotSent(int unitId, IReadOnlyCollection<EventDto> events);
     }
 }

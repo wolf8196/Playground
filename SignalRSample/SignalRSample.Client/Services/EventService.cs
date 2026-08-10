@@ -41,6 +41,11 @@ namespace SignalRSample.Client.Services
             events.UpdateEvent(evt);
         }
 
+        public void SetEvents(int unitId, IReadOnlyCollection<EventDto> evts)
+        {
+            events.SetEvents(unitId, evts);
+        }
+
         public async Task Subscribe()
         {
             if (subscribtion != null)

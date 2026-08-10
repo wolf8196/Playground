@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using SignalRSample.Api;
 
@@ -12,5 +13,7 @@ namespace SignalRSample.Client.Services
         void RemoveEvent(EventDto evt);
 
         void UpdateEvent(EventDto evt);
+
+        void SetEvents(int unitId, IReadOnlyCollection<EventDto> evts);
     }
 }

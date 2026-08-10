@@ -23,11 +23,8 @@ namespace SignalRSample.Server.Hubs
             foreach (var unitId in subscription.UnitIds)
             {
                 await Groups.AddToGroupAsync(Context.ConnectionId, unitId.ToString());
-                foreach (var evt in eventService.GetEvents(unitId))
-                {
-                    await Clients.Caller.EventAdded(evt);
-                }
-
+                var evts = eventService.GetEvents(unitId);
+                await Clients.Caller.SnapshotSent(unitId, evts);
                 logger.Debug("{ConnectionId} subscribed to group {UnitId}", Context.ConnectionId, unitId);
             }
         }

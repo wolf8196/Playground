@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
 using Serilog;
@@ -38,6 +39,12 @@ namespace SignalRSample.Client.HubListeners
         public override Task EventUpdated(EventDto evt)
         {
             eventService.UpdateEvent(evt);
+            return Task.CompletedTask;
+        }
+
+        public override Task SnapshotSent(int unitId, IReadOnlyCollection<EventDto> events)
+        {
+            eventService.SetEvents(unitId, events);
             return Task.CompletedTask;
         }
 
