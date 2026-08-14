@@ -485,3 +485,6 @@ dotnet_diagnostic.CA1305.severity = silent
 
 # xUnit1045: Avoid using TheoryData type arguments that might not be serializable
 dotnet_diagnostic.xUnit1045.severity = none
+
+# CA2208: Instantiate argument exceptions correctly
+dotnet_diagnostic.CA2208.severity = suggestion
