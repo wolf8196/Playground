@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "AzureSamples.Api": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7199",
+      "launchBrowser": true,
+      "launchUrl": "api/swagger/ui"
+    }
+  }
+}

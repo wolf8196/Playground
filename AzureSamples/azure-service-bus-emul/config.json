@@ -1,0 +1,31 @@
+{
+  "UserConfig": {
+    "Namespaces": [
+      {
+        "Name": "azure-samples",
+        "Queues": [
+          {
+            "Name": "events.queue",
+            "Properties": {
+              "DeadLetteringOnMessageExpiration": true,
+              "DefaultMessageTimeToLive": "PT1M",
+              "DuplicateDetectionHistoryTimeWindow": "PT1M",
+              "ForwardDeadLetteredMessagesTo": "",
+              "ForwardTo": "",
+              "LockDuration": "PT1M",
+              "MaxDeliveryCount": 3,
+              "RequiresDuplicateDetection": true,
+              "RequiresSession": false
+            }
+          }
+        ],
+
+        "Topics": [
+        ]
+      }
+    ],
+    "Logging": {
+      "Type": "File"
+    }
+  }
+}
